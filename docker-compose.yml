@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  api-gateway:
+    image: hahuynhhuy159/api-gateway
+    ports:
+      - 5000:5000
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+
+  auth-service:
+    image: hahuynhhuy159/auth-service
+    ports:
+      - 5200:5200
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+
+  job-service:
+    image: hahuynhhuy159/job-service
+    ports:
+      - 5300:5300
+    build:
+      context: ./services/job-service
+      dockerfile: Dockerfile
+
+  client-jobify:
+    image: hahuynhhuy159/client-jobify
+    ports:
+      - 3000:3000
+    links:
+      - api-gateway
+      - auth-service
+      - job-service
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    depends_on:
+      - api-gateway
